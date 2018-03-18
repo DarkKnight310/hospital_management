@@ -62,6 +62,10 @@ class appointment(models.Model):
     receptionist_id = models.ForeignKey(receptionist,on_delete=models.CASCADE)
     patient_id = models.ForeignKey(patients,on_delete=models.CASCADE)
 
+class login_details(models.Model):
+    type = models.CharField(max_length=1)
+    username = models.CharField(max_length=20)
+    password = models.CharField(max_length=20)
 
 # class Choice(models.Model):
   #  question = models.ForeignKey(Question, on_delete=models.CASCADE)

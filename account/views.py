@@ -6,6 +6,8 @@ from manageHospital import models
 from django.http import HttpResponseRedirect, HttpResponse
 from .forms import login
 from django.views.decorators.csrf import csrf_protect
+from manageHospital.models import login_details, patients, consults
+
 
 
 # Create your views here.
@@ -32,8 +34,9 @@ def doctor_login(request):
 		form = login(request.POST)
 		if form.is_valid():
 			user_id = form.cleaned_data['user_id']
-			user_psw = form.cleaned_data['user_pwd']
-			if user_id == "sid":
+			user_pwd = form.cleaned_data['user_pwd']
+			matched = login_details.objects.filter(type = '1', username = user_id, password = user_pwd)
+			if len(matched) is 1:
 				return HttpResponseRedirect('home/')
 	else:
 		form = login()
