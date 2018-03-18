@@ -19,4 +19,5 @@ from django.contrib import admin
 urlpatterns = [
     path('manageHospital/', include('manageHospital.urls')),
     path('admin/', admin.site.urls),
+    path('login/', include('account.urls')),
 ]

@@ -58,7 +58,9 @@ ROOT_URLCONF = 'hospital_management.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [
+		'/home/sibby/Desktop/dbms/proj/hospital_management/templates',
+	],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -82,7 +84,7 @@ DATABASES = {
         'ENGINE': 'django.db.backends.mysql',
         'NAME': 'manageHospital',
         'USER' : 'root',
-        'PASSWORD' : 'Qwerty@123',
+        'PASSWORD' : '123',
         'HOST' : 'localhost'
     }
 }
