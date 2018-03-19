@@ -31,6 +31,7 @@ class doctors(models.Model):
     doctor_salary = models.IntegerField()
     doctor_consultation_fee = models.IntegerField()
     doctor_login = models.CharField(max_length=20, default='secret')
+    doctor_charge = models.IntegerField(default=500)
 
 class doctor_phone_number(models.Model):
     doctor_id = models.ForeignKey(doctors, on_delete=models.CASCADE)
@@ -39,6 +40,7 @@ class doctor_phone_number(models.Model):
 class consults(models.Model):
     patient_id = models.ForeignKey(patients, on_delete=models.CASCADE)
     doctor_id = models.ForeignKey(doctors, on_delete=models.CASCADE)
+    allot_room = models.BooleanField(default=False)
 
 class belongs_to(models.Model):
     doctor_id = models.ForeignKey(doctors, on_delete=models.CASCADE)
@@ -58,9 +60,13 @@ class maintains(models.Model):
     receptionist_id = models.ForeignKey(receptionist,on_delete=models.CASCADE)
     bill_id = models.ForeignKey(bill,on_delete=models.CASCADE)
 
+class room(models.Model):
+    charge = models.IntegerField(default=200)
+
 class appointment(models.Model):
     receptionist_id = models.ForeignKey(receptionist,on_delete=models.CASCADE)
     patient_id = models.ForeignKey(patients,on_delete=models.CASCADE)
+    room_id = models.ForeignKey(room, on_delete=models.CASCADE, null=True)
 
 class login_details(models.Model):
     type = models.CharField(max_length=1)

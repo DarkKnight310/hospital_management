@@ -17,3 +17,5 @@ admin.site.register(bill)
 admin.site.register(maintains)
 admin.site.register(appointment)
 admin.site.register(login_details)
+admin.site.register(room)
+
