@@ -6,7 +6,7 @@ from manageHospital import models
 from django.http import HttpResponseRedirect, HttpResponse
 from .forms import login
 from django.views.decorators.csrf import csrf_protect
-from manageHospital.models import login_details, patients, consults
+from manageHospital.models import login_details, patients, consults, doctors
 
 
 
@@ -27,7 +27,14 @@ def receptionist_home(request):
 	return render_to_response('receptionist_home.html')
 
 def doctor_home(request):
-	return render_to_response('doctor_home.html')
+	user_id = request.session['user_id']
+	q0 = doctors.objects.get(doctor_login = user_id)
+	name = q0.doctor_name;
+	q3 = q0.consults_set.all()
+	data=[]
+	for i in q3:
+		data.append(patients.objects.get(id = i.patient_id.id))
+	return render_to_response('doctor_home.html', {'name': name, 'data': data})
 
 def doctor_login(request):
 	if request.method == 'POST':
@@ -37,6 +44,7 @@ def doctor_login(request):
 			user_pwd = form.cleaned_data['user_pwd']
 			matched = login_details.objects.filter(type = '1', username = user_id, password = user_pwd)
 			if len(matched) is 1:
+				request.session['user_id'] = user_id
 				return HttpResponseRedirect('home/')
 	else:
 		form = login()

@@ -11,8 +11,6 @@ class patients(models.Model):
     patient_date_of_admission = models.DateTimeField('date published')
     patient_gender = models.CharField(max_length = 200)
     patient_problem = models.CharField(max_length = 500)
-    def __str__(self):
-        return self.patient_problem
 
 class patient_phone_number(models.Model):
     patient_id = models.ForeignKey(patients, on_delete=models.CASCADE)
@@ -32,6 +30,7 @@ class doctors(models.Model):
     doctor_degree = models.CharField(max_length=10)
     doctor_salary = models.IntegerField()
     doctor_consultation_fee = models.IntegerField()
+    doctor_login = models.CharField(max_length=20, default='secret')
 
 class doctor_phone_number(models.Model):
     doctor_id = models.ForeignKey(doctors, on_delete=models.CASCADE)
@@ -49,6 +48,7 @@ class receptionist(models.Model):
     receptionist_name = models.CharField(max_length=200);
     receptionist_date_of_joining = models.DateTimeField('date published');
     receptionist_salary = models.IntegerField()
+    receptionist_login = models.CharField(max_length=20, default='secret')
 
 class bill(models.Model):
     patient_id = models.ForeignKey(patients, on_delete=models.CASCADE)

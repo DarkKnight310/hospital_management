@@ -10,17 +10,51 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 <body>
- 
+ <h1>Welcome Dr. {{ name }}</h1>
 
   <div class="jumbotron">
-    <h1>Patient waiting:</h1>      
+    <h2>Patient waiting</h2>  
+    <hr>    
     <p>link the database and show the table of patients that are waiting for the doctor</p>
     
   </div>
 
   <div class="jumbotron">
-    <h1>Patients you have seen in the past:</h1>      
-    <p>link the database and show the table of patients that are waiting for the doctor(if more than 1 patient can be present in the buffer)</p>
+    <h2>Patients</h2>  
+    <hr>
+    <div class="container">
+  <p>Pateints you have seen in the past:</p>     
+  
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Problem</th>
+        <th>Date of Admission</th>
+        <th>House No</th>
+        <th>Street No</th>
+        <th>City</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for i in data %}
+    <tr>
+      <td>{{ i.id }}</td>
+      <td>{{ i.patient_name }}</td>
+      <td>{{ i.patient_gender }}</td>
+      <td>{{ i.patient_problem }}</td>
+      <td>{{ i.patient_date_of_admission }}</td>
+      <td>{{ i.patient_house_no }}</td>
+      <td>{{ i.patient_street_no }}</td>
+      <td>{{ i.patient_city_name }}</td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+  </table>
+</div>    
   </div>
 
 </div>
