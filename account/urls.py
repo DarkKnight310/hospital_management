@@ -1,5 +1,6 @@
 from django.conf.urls import url, include
 from . import views
+from django.urls import path
 
 urlpatterns = [
 	url(r'^doctor/$', views.doctor_login),
@@ -7,4 +8,7 @@ urlpatterns = [
 	url(r'^$', views.first_page),
 	url(r'^doctor/home/$', views.doctor_home),
 	url(r'^receptionist/home/$', views.receptionist_home),
+	path('doctor/home/patient/<int:patient_id>/', views.patient_doctor),
+	path('doctor/home/prescription/<int:appointment_id>/', views.prescription),
+	url(r'^receptionist/home/appointment_new/$', views.receptionist_new_patient),
 ]

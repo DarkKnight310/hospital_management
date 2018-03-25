@@ -11,7 +11,54 @@
 </head>
 <body>
 
+  <h1>Welcome Receptionist : {{ name }}</h1>
+
+
+<div class="container">
   <div class="jumbotron">
+  <h3>Patients appointed by you :</h3>  
+  <br>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>id</th>
+        <th>Name</th>
+        <th>Gender</th>
+        <th>Problem</th>
+        <th>Date of Admission</th>
+        <th>House No</th>
+        <th>Street No</th>
+        <th>City</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for i, j in data %}
+    <tr>
+      <td>{{ i.id }}</td>
+      <td>{{ j.patient_name }}</td>
+      <td>{{ j.patient_gender }}</td>
+      <td>{{ i.patient_problem }}</td>
+      <td>{{ i.patient_date_of_admission }}</td>
+      <td>{{ j.patient_house_no }}</td>
+      <td>{{ j.patient_street_no }}</td>
+      <td>{{ j.patient_city_name }}</td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+  </table>
+  </div>
+  </div>
+
+  <div class="btn-group btn-group-lg">
+    <br>
+    <button type="button" class="btn btn-primary" onclick="location.href = 'http://127.0.0.1:8000/login/receptionist/home/bill';">Generate Bill</button>
+    <button type="button" class="btn btn-primary" onclick="location.href = 'http://127.0.0.1:8000/login/receptionist/home/appointment_new';">Make Appointment for new patient</button>
+    <button type="button" class="btn btn-primary" onclick="location.href = 'http://127.0.0.1:8000/login/receptionist/home/appointment_exist';">Make Appointment for existing patient</button>
+  </div>
+
+  <!--div class="jumbotron">
     <h1>Patient waiting:</h1>      
     <p>link the database and show the table of patients that are waiting for the doctor</p>
     
@@ -20,7 +67,7 @@
   <div class="jumbotron">
     <h1>Patients you have seen in the past:</h1>      
     <p>link the database and show the table of patients that are waiting for the doctor(if more than 1 patient can be present in the buffer)</p>
-  </div>
+  </div-->
 
 </div>
 </div>

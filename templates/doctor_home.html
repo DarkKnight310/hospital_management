@@ -15,11 +15,71 @@
   <div class="jumbotron">
     <h2>Patient waiting</h2>  
     <hr>    
-    <p>link the database and show the table of patients that are waiting for the doctor</p>
-    
+    <div class="container">
+    <p>Upcoming Patient:</p>
+    <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Patient ID</th>
+        <th>Problem</th>
+        <th>Room</th>
+        <th>Date of Admission</th>
+        <th>Prescription</th>
+      </tr>
+    </thead>
+    <tbody>
+    <tr>
+      <td>{{ new_patient.id }}</td>
+      <td><strong><a href = "http://127.0.0.1:8000/login/doctor/home/patient/{{ new_patient.patient_id.id }}">  {{ new_patient.patient_id.id }}   </a></strong></td>
+      <td>{{ new_patient.patient_problem }}</td>
+      <td>{{ new_patient.room_id.id }}</td>
+      <td>{{ new_patient.patient_date_of_admission }}</td>
+      <td><strong><a href = "http://127.0.0.1:8000/login/doctor/home/prescription/{{ new_patient.id }}">  +  </a></strong>
+    </tr>
+
+    </tbody>
+  </table>
+  </div>
   </div>
 
-  <div class="jumbotron">
+ <div class="jumbotron">
+    <h2>Appointments</h2>  
+    <hr>
+    <div class="container">
+  <p>Your previous appointments:</p>    
+  
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>ID</th>
+        <th>Patient ID</th>
+        <th>Gender</th>
+        <th>Age</th>
+        <th>Problem</th>
+        <th>Room</th>
+        <th>Date of Admission</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for i,j in data %}
+    <tr>
+      <td>{{ i.id }}</td>
+      <td><strong><a href = "http://127.0.0.1:8000/login/doctor/home/patient/{{ i.patient_id.id }}">  {{ i.patient_id.id }}  </a></strong></td>
+      <td>{{ j.patient_gender }}</td>
+      <td>{{ j.patient_age }}</td>
+      <td>{{ i.patient_problem }}</td>
+      <td>{{ i.room_id.id }}</td>
+      <td>{{ i.patient_date_of_admission }}</td>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+  </table>
+</div>    
+  </div>
+
+ <!-- <div class="jumbotron">
     <h2>Patients</h2>  
     <hr>
     <div class="container">
@@ -55,7 +115,7 @@
     </tbody>
   </table>
 </div>    
-  </div>
+  </div>-->
 
 </div>
 </div>
