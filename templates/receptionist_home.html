@@ -13,6 +13,13 @@
 
   <h1>Welcome Receptionist : {{ name }}</h1>
 
+<div class="btn-group btn-group-lg">
+    <br>
+    <button type="button" class="btn btn-primary" onclick="location.href = 'http://127.0.0.1:8000/login/receptionist/bill';">Generate Bill</button>
+    <button type="button" class="btn btn-primary" onclick="location.href = 'http://127.0.0.1:8000/login/receptionist/home/appointment_new';">Make Appointment for new patient</button>
+    <button type="button" class="btn btn-primary" onclick="location.href = 'http://127.0.0.1:8000/login/receptionist/home/appointment_exist';">Make Appointment for existing patient</button>
+    <button type="button" class="btn btn-primary" onclick="location.href = 'http://127.0.0.1:8000/login/receptionist/home/patient_edit';">Update Patient Details</button>
+  </div>
 
 <div class="container">
   <div class="jumbotron">
@@ -43,19 +50,13 @@
       <td>{{ j.patient_house_no }}</td>
       <td>{{ j.patient_street_no }}</td>
       <td>{{ j.patient_city_name }}</td>
+      <td><strong><a href = "http://127.0.0.1:8000/login/receptionist/home/appointment/{{ i.id }}/edit">edit</a></strong>
     </tr>
     {% endfor %}
 
     </tbody>
   </table>
   </div>
-  </div>
-
-  <div class="btn-group btn-group-lg">
-    <br>
-    <button type="button" class="btn btn-primary" onclick="location.href = 'http://127.0.0.1:8000/login/receptionist/home/bill';">Generate Bill</button>
-    <button type="button" class="btn btn-primary" onclick="location.href = 'http://127.0.0.1:8000/login/receptionist/home/appointment_new';">Make Appointment for new patient</button>
-    <button type="button" class="btn btn-primary" onclick="location.href = 'http://127.0.0.1:8000/login/receptionist/home/appointment_exist';">Make Appointment for existing patient</button>
   </div>
 
   <!--div class="jumbotron">

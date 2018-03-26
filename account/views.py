@@ -4,9 +4,9 @@ from __future__ import unicode_literals
 from django.shortcuts import render_to_response, render
 from manageHospital import models
 from django.http import HttpResponseRedirect, HttpResponse
-from .forms import login, pres, patient_det
+from .forms import *
 from django.views.decorators.csrf import csrf_protect
-from manageHospital.models import login_details, patients, consults, doctors, appointment, receptionist
+from manageHospital.models import *
 
 
 
@@ -68,6 +68,89 @@ def receptionist_new_patient(request):
 		form = patient_det()
 	return render(request, 'patient_det_form.html', {'form': form})
 
+def receptionist_existing_patient(request):
+	if request.method == 'POST':
+		form = patient_existing_det(request.POST)
+		if form.is_valid():
+			r_id = request.session['user_id']
+			r_obj = receptionist.objects.get(receptionist_login = r_id)
+			p_id = form.cleaned_data['patient']
+			p_object = patients.objects.get(id = p_id)
+			#rm_id = form.cleaned_data['patient_room_no']
+			#rm_obj = room.objects.get(id = rm_id)
+			a = appointment(receptionist_id = r_obj, patient_id = p_object, patient_date_of_admission = form.cleaned_data['patient_date_of_admission'],patient_problem = form.cleaned_data['patient_problem'], treated = False)
+			a.save()
+			d_id = form.cleaned_data['doctors_available']
+			d_object = doctors.objects.get(id = d_id)
+			d_object.doctor_availability = False
+			d_object.save()
+
+			c = consults(appointment_id = a,doctor_id = d_object, allot_room = False, prescription = "null")
+			c.save()
+
+			return HttpResponseRedirect('/login/receptionist/home')
+	else:
+		form = patient_existing_det()
+	return render(request, 'patient_det_form.html', {'form': form})
+
+def receptionist_edit_appointment(request, appointment_id):
+	if request.method == 'POST':
+		a = appointment.objects.get(id=appointment_id)
+		if a.treated == True:
+			form = appointment_edit_treated(request.POST)
+			if form.is_valid():
+				patient_room_no = form.cleaned_data['patient_room_no']
+				r = room.objects.get(id=patient_room_no)
+				a.room_id = r
+				a.save()
+				return HttpResponseRedirect('/login/receptionist/home')
+
+		else:
+			form = appointment_edit(request.POST)
+			#print ("sdfsvv")
+			if form.is_valid():
+				#print ("hahaha")
+				patient_date_of_admission = form.cleaned_data['patient_date_of_admission']
+				patient_problem = form.cleaned_data['patient_problem']
+				choice = form.cleaned_data['choice']
+				a.patient_problem = patient_problem
+				a.patient_date_of_admission = patient_date_of_admission
+				#print (choice)
+				if choice == "1":
+					#print ("aya")
+					c = consults.objects.get(appointment_id = a)
+					d = c.doctor_id
+					d.doctor_availability = True
+					d.save()
+					c.delete()
+					a.save()
+					d_id = form.cleaned_data['doctors_available']
+					#print ("IUGIBJFNSJN")
+					#print (d_id)
+					d_object = doctors.objects.get(id = d_id)
+					d_object.doctor_availability = False
+					d_object.save()
+					c = consults(appointment_id = a,doctor_id = d_object, allot_room = False, prescription = "null")
+					c.save()
+				else:
+					a.save()
+				return HttpResponseRedirect('/login/receptionist/home')
+	else:
+		a = appointment.objects.get(id=appointment_id)
+		p = patients.objects.get(id = a.patient_id.id)
+		c = consults.objects.get(appointment_id = a)
+		d = c.doctor_id
+		if a.treated == True and c.allot_room == True:
+			try:
+				form = appointment_edit_treated(initial={'patient_room_no': a.room_id.id})
+			except:
+				form = appointment_edit_treated()
+			return render(request, 'edit_appointment_treated.html', {'p': p, 'form': form})
+		elif a.treated == True: 
+			return render(request, 'error_room_not_alloted.html')
+		else:
+			form = appointment_edit(initial={'patient_problem': a.patient_problem, 'patient_date_of_admission': a.patient_date_of_admission})
+			return render(request, 'edit_appointment.html', {'p': p, 'form': form, 'd': d})
 
 def doctor_home(request):
 	user_id = request.session['user_id']
@@ -117,7 +200,11 @@ def patient_doctor(request,patient_id):
 	a = []
 	c1 = []
 	for i in c:
-		c1.append(consults.objects.get(appointment_id=i, doctor_id=q0))
+		try:
+			x = consults.objects.get(appointment_id=i, doctor_id=q0)
+			c1.append(x)
+		except:
+			print ("hii")
 	for i in c1:
 		print(i)
 		pp=(i,appointment.objects.get(id=i.appointment_id.id))
@@ -139,6 +226,10 @@ def prescription(request, appointment_id):
 			c_edit.save()
 			a.treated = True
 			a.save()
+			user_id = request.session['user_id']
+			q0 = doctors.objects.get(doctor_login = user_id)
+			q0.doctor_availability = True
+			q0.save()
 			return HttpResponseRedirect('/login/doctor/home/')
 	else:
 		form = pres()
@@ -169,22 +260,98 @@ def bill_info(request):
 		form = bill_inf(request.POST)
 		if form.is_valid():
 			a_id = form.cleaned_data['appointment_id']
-			q0 = consults.objects.get(appointment_id = a_id)
-			d0 = doctors.objects.get(id = q0.doctor_id)
+			#b_out.app_id = a_id
+			a0 = appointment.objects.get(id = a_id)
+			q0 = consults.objects.get(appointment_id = a0)
+			print(q0.doctor_id)
+			#b_out.doc_id = q0.doctor_id.id
+			#b_out.doc_name = q0.doctor_id.doctor_name
+			#b_out.pat_id = a0.patient_id
+			d0 = doctors.objects.get(pk = q0.doctor_id.id)
 			#a0 = appointment.objects.get(id = a_id)
 			#r0 = room.objects.get(id = a0.room_id)
-			r_cost = r0.charge
+			#r_cost = r0.charge
 			d_fees = d0.doctor_consultation_fee
+			r_cost = d_fees
 			if q0.allot_room == True:
-				a0 = appointment.objects.get(id = a_id)
-				r0 = room.objects.get(id = a0.room_id)
-				tdelta = timezone.now() - a0.receptionist_date_of_joining
-				hrs = tdelta.seconds/3600
-				days = hrs/24
-				r_cost = r_cost + (days*r0.charge)
-
-			bill_up = bill(appointment_id = a_id, discharge_time = timezone.now(), amount = r_cost)
-			return HttpResponseRedirect('/login/receptionist')
+				r0 = room.objects.get(id = a0.room_id.id)
+				#b_out.rm_id = a0.room_id.id
+				#b_out.rm_charge = r0.charge
+				#now_time = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
+				tdelta = datetime.today().date() - a0.patient_date_of_admission.date()
+				#hrs = tdelta.seconds/3600
+				days = tdelta.days
+				print(r0.charge)
+				print(days)
+				r_cost = d_fees + (days*r0.charge)
+			#b_out.final_amount = r_cost
+			bill_up = bill(appointment_id = a0, discharge_time = datetime.now(), amount = r_cost)
+			bill_up.save()
+			print(r_cost)
+			return HttpResponseRedirect('/login/receptionist/bill_print/{}'.format(a_id))
 	else:
-		form = patient_det()
-	return render(request, 'patient_det_form.html', {'form': form})
+		form = bill_inf()
+	return render(request, 'bill.html', {'form': form})
+
+#as soon as bill is generated,it prints it			
+
+def bill_print(request, a_id):
+	
+	#b_out.app_id = a_id
+	a0 = appointment.objects.get(id = a_id)
+	q0 = consults.objects.get(appointment_id = a0)
+	print(q0.doctor_id)
+	#b_out.doc_id = q0.doctor_id.id
+	#b_out.doc_name = q0.doctor_id.doctor_name
+	#b_out.pat_id = a0.patient_id
+	d0 = doctors.objects.get(pk = q0.doctor_id.id)
+	#a0 = appointment.objects.get(id = a_id)
+	#r0 = room.objects.get(id = a0.room_id)
+	#r_cost = r0.charge
+	d_fees = d0.doctor_consultation_fee
+	r_cost = d_fees
+	if q0.allot_room == True:
+		r0 = room.objects.get(id = a0.room_id.id)
+		#b_out.rm_id = a0.room_id.id
+		#b_out.rm_charge = r0.charge
+		#now_time = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
+		tdelta = datetime.today().date() - a0.patient_date_of_admission.date()
+		#hrs = tdelta.seconds/3600
+		days = tdelta.days
+		print(r0.charge)
+		print(days)
+		r_cost = d_fees + (days*r0.charge)
+	#b_out.final_amount = r_cost
+	return render(request, 'bill_print.html', {'appid': a_id,'pat_id': a0.patient_id.id, 'doc_id':q0.doctor_id.id, 'doc_name':q0.doctor_id.doctor_name,'final_amount':r_cost, 'r_id':a0.room_id.id,'r_charge':r0.charge})		
+
+#showing bill info given by bill_id, urls update karde
+
+def get_bill_print(request, b_id):
+	
+	#b_out.app_id = a_id
+	b0 = bill.objects.get(id = b_id)
+	a0 = appointment.objects.get(id = b0.appointment_id.id)
+	q0 = consults.objects.get(appointment_id = a0)
+	print(q0.doctor_id)
+	#b_out.doc_id = q0.doctor_id.id
+	#b_out.doc_name = q0.doctor_id.doctor_name
+	#b_out.pat_id = a0.patient_id
+	d0 = doctors.objects.get(pk = q0.doctor_id.id)
+	#a0 = appointment.objects.get(id = a_id)
+	#r0 = room.objects.get(id = a0.room_id)
+	#r_cost = r0.charge
+	d_fees = d0.doctor_consultation_fee
+	r_cost = d_fees
+	if q0.allot_room == True:
+		r0 = room.objects.get(id = a0.room_id.id)
+		#b_out.rm_id = a0.room_id.id
+		#b_out.rm_charge = r0.charge
+		#now_time = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
+		tdelta = datetime.today().date() - a0.patient_date_of_admission.date()
+		#hrs = tdelta.seconds/3600
+		days = tdelta.days
+		print(r0.charge)
+		print(days)
+		r_cost = d_fees + (days*r0.charge)
+	#b_out.final_amount = r_cost
+	return render(request, 'bill_print.html', {'appid': appointment_id.id,'pat_id': a0.patient_id.id, 'doc_id':q0.doctor_id.id, 'doc_name':q0.doctor_id.doctor_name,'final_amount':r_cost, 'r_id':a0.room_id.id,'r_charge':r0.charge})		
