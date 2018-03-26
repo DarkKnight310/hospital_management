@@ -163,15 +163,18 @@ def receptionist_edit_patient(request, patient_id):
 			patient_name = form.cleaned_data['patient_name']
 			patient_city_name = form.cleaned_data['patient_city_name']
 			patient_house_no = form.cleaned_data['patient_house_no']
-			patient_street_no = forms.cleaned_data['patient_street_no']
-			patient_age = forms.cleaned_data['patient_age']
-			patient_gender = forms.cleaned_data['patient_gender']
+			patient_street_no = form.cleaned_data['patient_street_no']
+			patient_age = form.cleaned_data['patient_age']
+			patient_gender = form.cleaned_data['patient_gender']
 			p.patient_name = patient_name
 			p.patient_city_name = patient_city_name
 			p.patient_house_no = patient_house_no
 			p.patient_street_no = patient_street_no
 			p.patient_age = patient_age
 			p.patient_gender = patient_gender
+			p.save()
+			return HttpResponseRedirect('/login/receptionist/home')
+
 			#print (choice)
 	else:
 		p = patients.objects.get(id = patient_id)
