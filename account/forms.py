@@ -95,4 +95,7 @@ class patient_edit(forms.Form):
 		self.fields['doctors_available'] = forms.ChoiceField(label = 'Doctors Available',choices=[(a, b) for a, b in list2])
 
 class bill_inf(forms.Form):
-	appointment_id = forms.IntegerField(label='Bill')
+	def __init__(self, *args, **kwargs):
+		super(bill_inf, self).__init__(*args, **kwargs)
+		list1 = appointment.objects.all()
+		self.fields['appointment'] = forms.ChoiceField(label='Appointment ID', choices=[(a.id,a.id) for a in list1])

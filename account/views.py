@@ -260,31 +260,19 @@ def bill_info(request):
 		form = bill_inf(request.POST)
 		if form.is_valid():
 			a_id = form.cleaned_data['appointment_id']
-			#b_out.app_id = a_id
 			a0 = appointment.objects.get(id = a_id)
 			q0 = consults.objects.get(appointment_id = a0)
 			print(q0.doctor_id)
-			#b_out.doc_id = q0.doctor_id.id
-			#b_out.doc_name = q0.doctor_id.doctor_name
-			#b_out.pat_id = a0.patient_id
 			d0 = doctors.objects.get(pk = q0.doctor_id.id)
-			#a0 = appointment.objects.get(id = a_id)
-			#r0 = room.objects.get(id = a0.room_id)
-			#r_cost = r0.charge
 			d_fees = d0.doctor_consultation_fee
 			r_cost = d_fees
 			if q0.allot_room == True:
 				r0 = room.objects.get(id = a0.room_id.id)
-				#b_out.rm_id = a0.room_id.id
-				#b_out.rm_charge = r0.charge
-				#now_time = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
 				tdelta = datetime.today().date() - a0.patient_date_of_admission.date()
-				#hrs = tdelta.seconds/3600
 				days = tdelta.days
 				print(r0.charge)
 				print(days)
 				r_cost = d_fees + (days*r0.charge)
-			#b_out.final_amount = r_cost
 			bill_up = bill(appointment_id = a0, discharge_time = datetime.now(), amount = r_cost)
 			bill_up.save()
 			print(r_cost)
@@ -297,61 +285,37 @@ def bill_info(request):
 
 def bill_print(request, a_id):
 	
-	#b_out.app_id = a_id
 	a0 = appointment.objects.get(id = a_id)
 	q0 = consults.objects.get(appointment_id = a0)
 	print(q0.doctor_id)
-	#b_out.doc_id = q0.doctor_id.id
-	#b_out.doc_name = q0.doctor_id.doctor_name
-	#b_out.pat_id = a0.patient_id
 	d0 = doctors.objects.get(pk = q0.doctor_id.id)
-	#a0 = appointment.objects.get(id = a_id)
-	#r0 = room.objects.get(id = a0.room_id)
-	#r_cost = r0.charge
 	d_fees = d0.doctor_consultation_fee
 	r_cost = d_fees
 	if q0.allot_room == True:
 		r0 = room.objects.get(id = a0.room_id.id)
-		#b_out.rm_id = a0.room_id.id
-		#b_out.rm_charge = r0.charge
-		#now_time = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
 		tdelta = datetime.today().date() - a0.patient_date_of_admission.date()
-		#hrs = tdelta.seconds/3600
 		days = tdelta.days
 		print(r0.charge)
 		print(days)
 		r_cost = d_fees + (days*r0.charge)
-	#b_out.final_amount = r_cost
 	return render(request, 'bill_print.html', {'appid': a_id,'pat_id': a0.patient_id.id, 'doc_id':q0.doctor_id.id, 'doc_name':q0.doctor_id.doctor_name,'final_amount':r_cost, 'r_id':a0.room_id.id,'r_charge':r0.charge})		
 
 #showing bill info given by bill_id, urls update karde
 
 def get_bill_print(request, b_id):
 	
-	#b_out.app_id = a_id
 	b0 = bill.objects.get(id = b_id)
 	a0 = appointment.objects.get(id = b0.appointment_id.id)
 	q0 = consults.objects.get(appointment_id = a0)
 	print(q0.doctor_id)
-	#b_out.doc_id = q0.doctor_id.id
-	#b_out.doc_name = q0.doctor_id.doctor_name
-	#b_out.pat_id = a0.patient_id
 	d0 = doctors.objects.get(pk = q0.doctor_id.id)
-	#a0 = appointment.objects.get(id = a_id)
-	#r0 = room.objects.get(id = a0.room_id)
-	#r_cost = r0.charge
 	d_fees = d0.doctor_consultation_fee
 	r_cost = d_fees
 	if q0.allot_room == True:
 		r0 = room.objects.get(id = a0.room_id.id)
-		#b_out.rm_id = a0.room_id.id
-		#b_out.rm_charge = r0.charge
-		#now_time = datetime.datetime.combine(datetime.date.today(), datetime.time.min)
 		tdelta = datetime.today().date() - a0.patient_date_of_admission.date()
-		#hrs = tdelta.seconds/3600
 		days = tdelta.days
 		print(r0.charge)
 		print(days)
 		r_cost = d_fees + (days*r0.charge)
-	#b_out.final_amount = r_cost
 	return render(request, 'bill_print.html', {'appid': appointment_id.id,'pat_id': a0.patient_id.id, 'doc_id':q0.doctor_id.id, 'doc_name':q0.doctor_id.doctor_name,'final_amount':r_cost, 'r_id':a0.room_id.id,'r_charge':r0.charge})		
