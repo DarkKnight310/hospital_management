@@ -21,6 +21,7 @@ class patient_det(forms.Form):
 	patient_date_of_admission = forms.DateTimeField(label='date of admission', required = False, initial=datetime.today)
 	#patient_room_no = forms.CharField(label = 'Room no',max_length = 5, required = False)
 	list1 = doctors.objects.filter(doctor_availability = True)
+	print (list1)
 	list2 = []
 	#print (list1)
 	for i in list1:
@@ -99,3 +100,21 @@ class bill_inf(forms.Form):
 		super(bill_inf, self).__init__(*args, **kwargs)
 		list1 = appointment.objects.all()
 		self.fields['appointment'] = forms.ChoiceField(label='Appointment ID', choices=[(a.id,a.id) for a in list1])
+
+class bill_search(forms.Form):
+	def __init__(self, *args, **kwargs):
+		super(bill_search, self).__init__(*args, **kwargs)
+		list1 = bill.objects.all()
+		self.fields['bill'] = forms.ChoiceField(label='Bill ID', choices=[(a.id,a.id) for a in list1])
+
+class patient_edit(forms.Form):
+	#patient_id = forms.IntegerField(label = 'Patient_id')
+	def __init__(self, *args, **kwargs):
+		super(patient_edit, self).__init__(*args, **kwargs)
+		self.fields['patient_name'] = forms.CharField(label = 'Patient-name',max_length = 500)
+		self.fields['patient_city_name'] = forms.CharField(label='City',max_length=200)
+		self.fields['patient_house_no'] = forms.IntegerField(label='House No.')
+		self.fields['patient_street_no'] = forms.IntegerField(label='Street No.')
+		self.fields['patient_age'] = forms.IntegerField(label='Age')
+		self.fields['patient_gender'] = forms.CharField(label = 'Gender',max_length = 1)
+		

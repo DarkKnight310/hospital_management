@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <title>Bootstrap Example</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+</head>
+<body>
+
+  <h1>All Patient Details</h1>
+
+<div class="container">
+  <div class="jumbotron">
+  <br>
+
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th>Patient-id</th>
+        <th>Patient-name</th>
+        <th>City</th>
+        <th>House No,</th>
+        <th>Street No.</th>
+        <th>Age</th>
+        <th>Gender</th>
+      </tr>
+    </thead>
+    <tbody>
+    {% for i in data %}
+    <tr>
+      <td>{{ i.id }}</td>
+      <td>{{ i.patient_name }}</td>
+      <td>{{ i.patient_city_name }}</td>
+      <td>{{ i.patient_house_no }}</td>
+      <td>{{ i.patient_street_no }}</td>
+      <td>{{ i.patient_age }}</td>
+      <td>{{ i.patient_gender }}</td>
+      <td><strong><a href = "http://127.0.0.1:8000/login/receptionist/home/edit_patient/{{ i.id }}/edit">edit</a></strong>
+    </tr>
+    {% endfor %}
+
+    </tbody>
+  </table>
+  </div>
+  </div>
+
+  <!--div class="jumbotron">
+    <h1>Patient waiting:</h1>      
+    <p>link the database and show the table of patients that are waiting for the doctor</p>
+    
+  </div>
+
+  <div class="jumbotron">
+    <h1>Patients you have seen in the past:</h1>      
+    <p>link the database and show the table of patients that are waiting for the doctor(if more than 1 patient can be present in the buffer)</p>
+  </div-->
+
+</div>
+</div>
+
+</body>
+</html>

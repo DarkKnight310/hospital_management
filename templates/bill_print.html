@@ -10,30 +10,24 @@
   <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
 </head>
 <body>
- <h1>Bill for Patient</h1>
+ <h1>Bill for Patient ID {{ pat.id }} ({{ pat.patient_name }})</h1>
 
   <div class="jumbotron">
-    <h2>Patient waiting</h2>  
-    <hr>    
-    <p>link the database and show the table of patients that are waiting for the doctor</p>
-    
-  </div>
-
-  <div class="jumbotron">
-    <h2>Patients</h2>  
+    <h2>Bill</h2>  
     <hr>
-    <div class="container">
-  <p>Pateints you have seen in the past:</p>     
+    <div class="container">   
   
   <table class="table table-striped">
     <thead>
       <tr>
-        <th>Appointment_id</th>
-        <th>Patient_id</th>
-        <th>Doctor_id</th>
-        <th>Doctor_name</th>
-        <th>Room_id</th>
-        <th>room_charge_per_day</th>
+        <th>Appointment ID</th>
+        <th>Patient ID</th>
+        <th>Doctor ID</th>
+        <th>Doctor Name</th>
+        <th>Doctor Fees</th>
+        <th>Room ID</th>
+        <th>Room charge</th>
+        <th>Days room used</th>
         <th>Final Amount</th>
       </tr>
     </thead>
@@ -41,11 +35,13 @@
 
     <tr>
       <td>{{ appid }}</td>
-      <td>{{ pat_id }}</td>
+      <td>{{ pat.id }}</td>
       <td>{{ doc_id }}</td>
       <td>{{ doc_name }}</td>
+      <td>{{ d_fees }}</td>
       <td>{{ r_id }}</td>
       <td>{{ r_charge }}</td>
+      <td>{{ days }}</td>
       <td>{{ final_amount }}</td>
     </tr>
     

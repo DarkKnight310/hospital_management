@@ -14,5 +14,9 @@ urlpatterns = [
 	url(r'^receptionist/home/appointment_exist/$', views.receptionist_existing_patient),
 	path('receptionist/home/appointment/<int:appointment_id>/edit', views.receptionist_edit_appointment),
 	url(r'^receptionist/bill/$', views.bill_info),
+	path('receptionist/view_bill/<int:b_id>',views.get_bill_print),
+	url(r'^receptionist/view_bill', views.bill_find),
 	path('receptionist/bill_print/<int:a_id>',views.bill_print),
+	path('receptionist/home/edit_patient/<int:patient_id>/edit/', views.receptionist_edit_patient),
+	url(r'^receptionist/home/patient_edit$', views.patient_edit),
 ]
