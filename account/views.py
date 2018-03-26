@@ -149,7 +149,7 @@ def receptionist_edit_appointment(request, appointment_id):
 			form = appointment_edit(initial={'patient_problem': a.patient_problem, 'patient_date_of_admission': a.patient_date_of_admission})
 			return render(request, 'edit_appointment.html', {'p': p, 'form': form, 'd': d})
 
-def patient_edit(request):
+def view_patient_edit(request):
 	p = patients.objects.all()
 	return render_to_response('all_patients.html',{'data' : p})
 

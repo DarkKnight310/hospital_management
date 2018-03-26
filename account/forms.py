@@ -73,28 +73,6 @@ class appointment_edit_treated(forms.Form):
 		super(appointment_edit_treated, self).__init__(*args, **kwargs)
 		self.fields['patient_room_no'] = forms.CharField(label = 'Room no',max_length = 5)
 
-#update this
-class patient_edit(forms.Form):
-	#patient_id = forms.IntegerField(label = 'Patient_id')
-	def __init__(self, *args, **kwargs):
-		super(patient_edit, self).__init__(*args, **kwargs)
-		list3 = patients.objects.all()
-		list4 = []
-		for i in list3:
-			y = (i.id, i.patient_name)
-			list4.append(y)
-		self.fields['patient'] = forms.ChoiceField(label = 'Patient', choices = [(a,b) for a,b in list4])
-		self.fields['patient_problem'] = forms.CharField(label = 'Problem',max_length = 500)
-		self.fields['patient_date_of_admission'] = forms.DateTimeField(label='date of admission', required = False, initial=datetime.today)
-		self.fields['patient_room_no'] = forms.CharField(label = 'Room no',max_length = 5, required = False)
-		list1 = doctors.objects.filter(doctor_availability = True)
-		list2 = []
-		#print (list1)
-		for i in list1:
-			x = (i.id, i.doctor_name)
-			list2.append(x)
-		self.fields['doctors_available'] = forms.ChoiceField(label = 'Doctors Available',choices=[(a, b) for a, b in list2])
-
 class bill_inf(forms.Form):
 	def __init__(self, *args, **kwargs):
 		super(bill_inf, self).__init__(*args, **kwargs)
@@ -108,7 +86,6 @@ class bill_search(forms.Form):
 		self.fields['bill'] = forms.ChoiceField(label='Bill ID', choices=[(a.id,a.id) for a in list1])
 
 class patient_edit(forms.Form):
-	#patient_id = forms.IntegerField(label = 'Patient_id')
 	def __init__(self, *args, **kwargs):
 		super(patient_edit, self).__init__(*args, **kwargs)
 		self.fields['patient_name'] = forms.CharField(label = 'Patient-name',max_length = 500)

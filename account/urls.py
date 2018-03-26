@@ -18,5 +18,5 @@ urlpatterns = [
 	url(r'^receptionist/view_bill', views.bill_find),
 	path('receptionist/bill_print/<int:a_id>',views.bill_print),
 	path('receptionist/home/edit_patient/<int:patient_id>/edit/', views.receptionist_edit_patient),
-	url(r'^receptionist/home/patient_edit$', views.patient_edit),
+	url(r'^receptionist/home/patient_edit$', views.view_patient_edit),
 ]
